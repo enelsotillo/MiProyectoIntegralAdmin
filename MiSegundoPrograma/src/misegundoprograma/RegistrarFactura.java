@@ -548,8 +548,16 @@ String RegistroFactura[]=new String[8];
     }//GEN-LAST:event_txtFacturaProvActionPerformed
 
     private void btnRegistroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistroActionPerformed
-        // TODO add your handling code here:
-        Ordenparapago();
+        int ordenComprasEnPagos=0;
+        int idparapagos;
+        int aux_temporal;
+        aux_temporal=Integer.parseInt(OrdenComp);
+        ordenComprasEnPagos=ConsultarOrdenDePagos();
+        if(aux_temporal==ordenComprasEnPagos){
+            JOptionPane.showMessageDialog(rootPane, "Orden fue pagada; consultar table de pagos");
+        }else{
+         Ordenparapago();   
+        }
     }//GEN-LAST:event_btnRegistroActionPerformed
 
     // Metodos para consultar proveedor
@@ -674,13 +682,15 @@ public void BuscarProveedorXOrdenDeCompras(){
     }
 
 public void ErrorEnFactura(){
-    if(sumaRegistroFactura==sumaBDOrdenCompra){
+    int ordenComprasTemporalError;
+    ordenComprasTemporalError=Integer.parseInt(OrdenComp);
+    if(sumaRegistroFactura==sumaBDOrdenCompra || ordenComprasTemporalError!=ConsultarOrdenDePagos()){
         JOptionPane.showMessageDialog(null, "Verificandos Registros de Factura");
-        
         EtqErrorFacturas.setText("Registros Verificados");
         EtqErrorFacturas.setForeground(Color.green);
 //        EtqErrorFacturas.setForeground(font="serif".BOLD);
-    }else{
+    }  
+     else {
         JOptionPane.showMessageDialog(null,"Error Revisar Orden de Compras");
         EtqErrorFacturas.setText("Error");
         EtqErrorFacturas.setForeground(Color.red);
@@ -735,7 +745,7 @@ private void BuscarProveedorEnOrdenDeCompras(){
                       txtNumeroFactura.setText(nrofactura);
                       txtFecha.setText(FechaActual());
                       txtFacturaProv.setText(nrofactura);
-
+                      System.out.print("Oden de Pago Nro: "+ConsultarOrdenDePagos());
                 break;            
                 default:
                // opcion=JOptionPane.showInputDialog(null,"Salir del menu,  salir ingrese 3");
@@ -860,6 +870,26 @@ private void Ordenparapago(){
     }
     
 }
+//consultar orden para pago, si la orden de pago fue pagada
+    public int ConsultarOrdenDePagos(){
+        int ordenCompras=0;
+        String Pagos="SELECT idOrdenParaPagar,ordenCompras FROM ordenparapagar WHERE ordenCompras=?";
+         
+    try {
+        PreparedStatement ConsultaOrdenPago=cn.prepareStatement(Pagos);
+        ResultSet rs;    
+            ConsultaOrdenPago.setString(1,OrdenComp);
+            rs=ConsultaOrdenPago.executeQuery();
+            while(rs.next()){
+                //idParaPagar=Integer.parseInt(rs.getNString("idOrdenParaPagar"));
+                ordenCompras=Integer.parseInt(rs.getObject("ordenCompras").toString());
+            }
+     
+    } catch (SQLException ex) {
+        Logger.getLogger(RegistrarFactura.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    return ordenCompras;
+    }
 
     public static void main(String args[]) {
         /* Set the Nimbus loo and feel */

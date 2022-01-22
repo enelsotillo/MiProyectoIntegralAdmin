@@ -1,23 +1,32 @@
 package misegundoprograma;
 
 import java.sql.Connection;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import static net.ucanaccess.converters.Functions.date;
+import static org.apache.xalan.lib.ExsltDatetime.date;
 
 public class Disponible extends javax.swing.JFrame {
 MiSegundoPrograma cc=new MiSegundoPrograma();
 Connection cn=cc.conexion();
-DefaultTableModel TablaAsignacionPagos;
-String VectorPlanPagos[]= new String[8];
+DefaultTableModel TablaDisponible;
+String BancosYCaja[]= new String[4];
+DefaultTableModel TablaParaPagos;
 
     public Disponible() {
         initComponents();
-        TablaAsignacionPagos = new DefaultTableModel();
-        TablaAsignacionPagos.addColumn("Item");
-        TablaAsignacionPagos.addColumn("Codigo");
-        TablaAsignacionPagos.addColumn("Nombres");
-        TablaAsignacionPagos.addColumn("Conceptos");
-        TablaAsignacionPagos.addColumn("Fecha");
-        TablaAsignacionPagos.addColumn("Saldo");
+        TablaDisponible = new DefaultTableModel();
+        TablaDisponible.addColumn("Codigo");
+        TablaDisponible.addColumn("Nombres");
+        TablaDisponible.addColumn("Fecha");
+        TablaDisponible.addColumn("Saldo");
+        //tabla de pagos
+        TablaParaPagos = new DefaultTableModel();
+       TablaParaPagos.addColumn("Item");
+       TablaParaPagos.addColumn("Codigo");
+       TablaParaPagos.addColumn("Nombre");
+       TablaParaPagos.addColumn("Monto");
+       TablaParaPagos.addColumn("Saldo");
     }
 
     @SuppressWarnings("unchecked")
@@ -37,13 +46,13 @@ String VectorPlanPagos[]= new String[8];
         jLabel6 = new javax.swing.JLabel();
         txtSaldo = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btnIngresarBancoYCaja = new javax.swing.JButton();
+        SalirDeCaja = new javax.swing.JButton();
         jTextField5 = new javax.swing.JTextField();
         jButton3 = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
-        jTextField6 = new javax.swing.JTextField();
+        JtablaBancosyCajas = new javax.swing.JTable();
+        txtTotalEnCaja = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -76,35 +85,34 @@ String VectorPlanPagos[]= new String[8];
 
         jLabel7.setText("Saldo");
 
-        jButton1.setText("Ingrese Caja Efectivo");
-
-        jButton2.setText("Salir");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnIngresarBancoYCaja.setText("Agregue Saldo ...");
+        btnIngresarBancoYCaja.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnIngresarBancoYCajaActionPerformed(evt);
             }
         });
 
-        jTextField5.addActionListener(new java.awt.event.ActionListener() {
+        SalirDeCaja.setText("Salir");
+        SalirDeCaja.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField5ActionPerformed(evt);
+                SalirDeCajaActionPerformed(evt);
             }
         });
 
         jButton3.setText("Ingrese Pagos");
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        JtablaBancosyCajas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "Codigo", "Nombre", "Fecha", "Saldo"
+
             }
         ));
-        jScrollPane2.setViewportView(jTable2);
+        jScrollPane2.setViewportView(JtablaBancosyCajas);
 
         jLabel8.setText("Bancos y Caja en Efectivo");
 
@@ -116,10 +124,6 @@ String VectorPlanPagos[]= new String[8];
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(422, 422, 422)
-                        .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton3)
@@ -128,13 +132,16 @@ String VectorPlanPagos[]= new String[8];
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jButton1)
-                                .addComponent(jTextField6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(txtTotalEnCaja, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnIngresarBancoYCaja, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jLabel8)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 703, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 322, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(422, 422, 422)
+                                .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jLabel1)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -157,8 +164,8 @@ String VectorPlanPagos[]= new String[8];
                                     .addComponent(txtSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(423, 423, 423)
-                .addComponent(jButton2)
+                .addGap(421, 421, 421)
+                .addComponent(SalirDeCaja)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -166,7 +173,7 @@ String VectorPlanPagos[]= new String[8];
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -179,28 +186,27 @@ String VectorPlanPagos[]= new String[8];
                     .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1)
+                .addComponent(btnIngresarBancoYCaja)
                 .addGap(6, 6, 6)
                 .addComponent(jLabel8)
                 .addGap(3, 3, 3)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtTotalEnCaja, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton3)
-                        .addGap(323, 323, 323))
+                        .addGap(239, 239, 239))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(14, 14, 14)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton2)
-                        .addContainerGap())))
+                        .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addComponent(SalirDeCaja)
+                .addGap(55, 55, 55))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -216,35 +222,75 @@ String VectorPlanPagos[]= new String[8];
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 650, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void SalirDeCajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SalirDeCajaActionPerformed
         // Salir de Caja Disponible
         this.dispose();
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_SalirDeCajaActionPerformed
 
-    private void jTextField5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField5ActionPerformed
+    private void btnIngresarBancoYCajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarBancoYCajaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField5ActionPerformed
+        CargarBancosYCaja();
+        Limpiar();
+        SumarBancosyCaja();
+    }//GEN-LAST:event_btnIngresarBancoYCajaActionPerformed
 
     
+    //cargar bancos y cajas
+    public void CargarBancosYCaja(){
+        int codigoB;
+        String DescripcionB, FechaB;
+        Double saldoB;
+        saldoB=Double.parseDouble(txtSaldo.getText().toString());
+        BancosYCaja[0]=txtCodigo.getText();
+        BancosYCaja[1]=txtNombre.getText();
+        BancosYCaja[2]=txtFecha.getText();
+        BancosYCaja[3]=String.valueOf(saldoB);
+        TablaDisponible.addRow(BancosYCaja);
+            JOptionPane.showMessageDialog(null,"Saldo Agregado con Exito");
+            JtablaBancosyCajas.setModel(TablaDisponible);
+    }
+    //limpiar cajas de textos
+    public void Limpiar(){
+        txtCodigo.setText("");
+        txtNombre.setText("");
+        txtFecha.setText("");
+        txtSaldo.setText("");
+    }
+    
+    //sumar
+    public void SumarBancosyCaja(){
+        //recorre las filas de Jtable o tabla
+        double suma=0, total=0, iva=21, totalpago, montoIva=0;
+            for (int i = 0; i < JtablaBancosyCajas.getRowCount(); i++) {
+                suma=Double.parseDouble( JtablaBancosyCajas.getValueAt(i,3).toString());
+                total=total+suma; //acumula    
+            }
+            
+             if(total>0){           
+                 txtTotalEnCaja.setText(String.valueOf(total));
+             }
+    }
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new Disponible().setVisible(true);
+                
             }
         });
     }
  
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JTable JtablaBancosyCajas;
+    private javax.swing.JButton SalirDeCaja;
+    private javax.swing.JButton btnIngresarBancoYCaja;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -257,12 +303,11 @@ String VectorPlanPagos[]= new String[8];
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
     private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
     private javax.swing.JTextField txtCodigo;
     private javax.swing.JTextField txtFecha;
     private javax.swing.JTextField txtNombre;
     private javax.swing.JTextField txtSaldo;
+    private javax.swing.JTextField txtTotalEnCaja;
     // End of variables declaration//GEN-END:variables
 }

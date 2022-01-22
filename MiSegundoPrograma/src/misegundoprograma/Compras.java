@@ -20,6 +20,7 @@ public class Compras extends javax.swing.JFrame {
     ResultSet rs;
     //private String activa="";
     DefaultTableModel modelo;
+    int idCodigoProveedor;
     String ComprasN[]=new String[7];
     
     public Compras() {
@@ -437,8 +438,14 @@ public class Compras extends javax.swing.JFrame {
 
     private void btnBuscarProvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarProvActionPerformed
         
-        BuscarProveedorOrden();
-        
+        if(CodigoProveedor()==idCodigoProveedor){
+          BuscarProveedorOrden();
+         System.out.println("Codigo Proveedor: "+CodigoProveedor());
+         System.out.println("Codigo Proveedor: "+idCodigoProveedor);
+        } if(CodigoProveedor()!=idCodigoProveedor){
+            JOptionPane.showMessageDialog(null, "Proveedor no existe");
+            this.dispose();
+        }
     }//GEN-LAST:event_btnBuscarProvActionPerformed
 
     private void btnBuscarProductoOrdenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarProductoOrdenActionPerformed
@@ -577,9 +584,9 @@ public class Compras extends javax.swing.JFrame {
     private void BuscarProveedorOrden(){
         try {
             PreparedStatement ps=cn.prepareStatement("SELECT * FROM proveedor WHERE id_proveedor=?");
-            String codpro=JOptionPane.showInputDialog(null, "Ingrese Codigo del Proveedor");
+            idCodigoProveedor=Integer.parseInt(JOptionPane.showInputDialog(null, "Ingrese Codigo del Proveedor"));
                 
-            ps.setString(1,codpro);
+            ps.setInt(1,idCodigoProveedor);
             rs=ps.executeQuery();
             if(rs.next()){
                 txtCodigoProv.setText(rs.getString("id_proveedor"));
@@ -629,7 +636,7 @@ public class Compras extends javax.swing.JFrame {
         String fechatem;
         cantidadOrden=Integer.parseInt(txtCantidadOrden.getText().toString());
         precioTem=Integer.parseInt(txtPrecioOrden.getText().toString());
-        if(cantidadOrden>0 ||precioTem>0 ){
+        if(cantidadOrden>0 || precioTem>0 ){
             ComprasN[0]=txtOrdenNumero.getText();
             ComprasN[1]=txtCodigoProductoOrden.getText();
             ComprasN[2]=txtFechaOrden.getText();
@@ -761,6 +768,22 @@ public class Compras extends javax.swing.JFrame {
         }
     }
     
+    //metodo codigo de proveedor
+    private int CodigoProveedor(){
+        int idCodigoProveedorTemporal=0;
+        try {
+            PreparedStatement ps=cn.prepareStatement("SELECT * FROM proveedor WHERE id_proveedor=?");
+            ps.setInt(1,idCodigoProveedor);
+            rs=ps.executeQuery();
+            if(rs.next()){
+                idCodigoProveedorTemporal=Integer.parseInt(rs.getString("id_proveedor").toString());
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Compras.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null,"Proveedor no existe "+ ex);
+        }
+        return idCodigoProveedorTemporal;
+  }
     
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */

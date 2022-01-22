@@ -297,7 +297,12 @@ public class Bienvenida extends javax.swing.JFrame {
         });
         jMenu8.add(jMenuItem40);
 
-        jMenuItem41.setText("jMenuItem41");
+        jMenuItem41.setText("Tesoreria");
+        jMenuItem41.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem41ActionPerformed(evt);
+            }
+        });
         jMenu8.add(jMenuItem41);
 
         jMenuItem42.setText("jMenuItem42");
@@ -460,6 +465,13 @@ public class Bienvenida extends javax.swing.JFrame {
         abrirModuloPagos.setLocation(60, 50);
         
     }//GEN-LAST:event_jMenuItem40ActionPerformed
+
+    private void jMenuItem41ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem41ActionPerformed
+        // TODO add your handling code here:
+        Disponible Tesoreria = new Disponible();
+        Tesoreria.setVisible(true);
+         Tesoreria.setLocation(60, 50);
+    }//GEN-LAST:event_jMenuItem41ActionPerformed
 
     /**
      * @param args the command line arguments

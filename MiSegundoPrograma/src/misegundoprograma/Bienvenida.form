@@ -270,8 +270,11 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem41">
               <Properties>
-                <Property name="text" type="java.lang.String" value="jMenuItem41"/>
+                <Property name="text" type="java.lang.String" value="Tesoreria"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem41ActionPerformed"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem42">
               <Properties>
